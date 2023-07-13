@@ -174,7 +174,8 @@ const inFilePath = path.resolve(__dirname, "../in", inputFilePath);
 const outFilePath = path.resolve(__dirname, "../out", outputFilePath);
 
 if (!fs.existsSync(inFilePath)) {
-  throw new Error(`File not found: ${inFilePath}`);
+  console.log(`\nFailed to find ${inFilePath}\n`);
+  process.exit(1);
 }
 
 export {
