@@ -62,7 +62,7 @@ async function runAsyncCode() {
 
   const stats = await fs.stat(outFilePath);
   const fileSizeInKilobytes = (stats.size / 1024) | 0;
-  console.log(`\nDone. (${fileSizeInKilobytes.toLocaleString()} Kb)\n`);
+  console.log(`\nDone. (${fileSizeInKilobytes.toLocaleString()} KB)\n`);
 
   process.exit(0);
 }
