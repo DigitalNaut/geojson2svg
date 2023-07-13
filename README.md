@@ -76,6 +76,12 @@ yarn start -- --help
 
 ### Example
 
+To process a GeoJSON file named `map.geojson` in the `in` directory and output it as an SVG file named `map.svg` in the `out` directory, run:
+
+```bash
+pnpm start
+```
+
 I've included a GeoJSON file of Mexico in the `in` directory: [mexico.geojson](/in/mexico.geojson).
 
 To convert it to an SVG file, run:
@@ -86,10 +92,12 @@ pnpm start -i mexico.geojson -o mexico.svg`
 
 > Note: The input and output files are placed in the `in` and `out` directories respectively at the root of the project.
 
-This will use the default values for the command line arguments (save for the input and output files names):
+---
+
+A full example with all the command line arguments for a complete world map:
 
 ```bash
-pnpm start -i mexico.geojson -o mexico.svg -w 512 -h 250 -t 90 -b "-90" -l "-180" -r 180 --stroke-color "#ffffff" --stroke-weight 0.1 --fill-color "#7c7c7c" --fit-to height --optimize true -a "properties.ADMIN" "properties.ADM0_A3 A3"
+pnpm start -i map.geojson -o map.svg -w 512 -h 250 -t 90 -b "-90" -l "-180" -r 180 --stroke-color "#ffffff" --stroke-weight 0.1 --fill-color "#7c7c7c" --fit-to height --optimize true -a "properties.ADMIN" "properties.ADM0_A3 A3"
 ```
 
 This will transform:
@@ -126,6 +134,8 @@ This will transform:
         ]
       }
     }
+
+    // Other countries...
   ]
 }
 ```
@@ -147,7 +157,8 @@ into:
   version="1.2"
   viewbox="0 0 512 250"
 >
-  <path d="m300.498 159.86-..." A3="ZWE" ADMIN="Zimbabwe" />
+  <path d="m300.498 159.86- ..." A3="ZWE" ADMIN="Zimbabwe" /> // <- attributes copied over from GeoJSON
+  // Other countries...
 </svg>
 ```
 
