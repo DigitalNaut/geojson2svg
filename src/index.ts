@@ -14,6 +14,7 @@ import {
   outFilePath,
   mapExtent,
   optimize as optimizeSvg,
+  attributes,
 } from "./args";
 
 async function runAsyncCode() {
@@ -23,17 +24,7 @@ async function runAsyncCode() {
 
   const converter = new geojson2svg({
     mapExtent,
-    attributes: [
-      {
-        type: "dynamic",
-        property: "properties.ADMIN",
-      },
-      {
-        type: "dynamic",
-        property: "properties.ADM0_A3",
-        key: "A3",
-      },
-    ],
+    attributes,
     fitTo,
   });
 

@@ -2,7 +2,9 @@ import fs from "fs";
 import path from "path";
 import yargs from "yargs";
 
-interface Options {
+import type { Options, DynamicAttribute } from "geojson2svg";
+
+interface InputOptions {
   input: string;
   output: string;
   width: number;
@@ -14,8 +16,9 @@ interface Options {
   strokeColor: string;
   strokeWeight: number;
   fillColor: string;
-  fitTo: "width" | "height";
+  fitTo: Options["fitTo"];
   optimize: boolean;
+  attributes: DynamicAttribute[];
 }
 
 const argv = yargs
@@ -44,50 +47,76 @@ const argv = yargs
     type: "number",
   })
   .option("top", {
+    alias: "t",
     describe: "Top extent of the map",
     default: 90,
     type: "number",
   })
   .option("bottom", {
+    alias: "b",
     describe: "Bottom extent of the map",
     default: -90,
     type: "number",
   })
   .option("left", {
+    alias: "l",
     describe: "Left extent of the map",
     default: -180,
     type: "number",
   })
   .option("right", {
+    alias: "r",
     describe: "Right extent of the map",
     default: 180,
     type: "number",
   })
   .option("stroke-color", {
+    alias: "stroke",
     describe: "Color of the stroke",
     default: "#ffffff",
     type: "string",
   })
   .option("stroke-weight", {
+    alias: "weight",
     describe: "Weight of the stroke",
     default: 0.1,
     type: "number",
   })
   .option("fill-color", {
+    alias: "fill",
     describe: "Color of the fill",
     default: "#7c7c7c",
     type: "string",
   })
   .option("fit-to", {
+    alias: "fit",
     describe: "Fit the map to width or height",
     default: "height",
     choices: ["width", "height"],
     type: "string",
   })
   .option("optimize", {
+    alias: "opt",
     describe: "Optimize the output SVG",
     default: true,
     type: "boolean",
+  })
+  .option("attributes", {
+    alias: "a",
+    describe:
+      "To include an attribute use 'name', and 'name newName' to replace",
+    type: "array",
+    default: [],
+    coerce: (attributes: string[]) => {
+      return attributes.map((attribute) => {
+        const [property, key] = attribute.split(" ");
+        return {
+          type: "dynamic",
+          property,
+          key,
+        };
+      });
+    },
   })
   .check((argv) => {
     if (argv.width < 1 || argv.width > 10000) {
@@ -118,7 +147,7 @@ const argv = yargs
 
     return true;
   })
-  .parseSync() as Options;
+  .parseSync() as InputOptions;
 
 const {
   input: inputFilePath,
@@ -130,6 +159,7 @@ const {
   fillColor,
   fitTo,
   optimize,
+  attributes,
 } = argv;
 
 const viewBox = `0 0 ${width} ${height}`;
@@ -159,4 +189,5 @@ export {
   outFilePath,
   mapExtent,
   optimize,
+  attributes,
 };
