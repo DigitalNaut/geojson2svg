@@ -10,10 +10,10 @@ The GeoJSON file is a standard format for storing geographic data and the SVG fi
 
 The advantage of using an SVG instead of a GeoJSON file:
 
-- Compactness: taking up almost half the size of an average GeoJSON file
-- Ease of use: SVG files also easier to work with, as it is a standard format for storing vector graphics and can be manipulated on the fly using HTML, JSX or plain JS
+- **Compactness:** They take up almost half the size of an average GeoJSON file.
+- **Ease of use:** I find the SVG files easier to work with, as it is a standard format for storing vector graphics that can be manipulated on the fly using HTML, JSX or plain JS.
 
-This conversion is ideal for taking geographic data from [Natural Earth](https://www.naturalearthdata.com/), processing the `.shp` files with [QGIS](https://qgis.org/) and converting it to an SVG file for use in a React project.
+This conversion is ideal for taking geographic data from [Natural Earth](https://www.naturalearthdata.com/) after processing the `.shp` files with [QGIS](https://qgis.org/). You can then use the SVG file directly in an HTML file or in a React project.
 
 To learn how to use QGIS, see this wonderful [YouTube playlist](https://www.youtube.com/playlist?list=PL7HotvlLKHCs9nD1fFUjSOsZrsnctyV2R) by [Steven Bernard](https://www.youtube.com/@stevenbernard3505).
 
@@ -74,11 +74,21 @@ yarn start -- --help
 
 ### Example
 
+I've included a GeoJSON file of Mexico in the `in` directory: [mexico.geojson](/in/mexico.geojson).
+
+To convert it to an SVG file, run:
+
 ```bash
-pnpm start -i map.geojson -o map.svg -w 512 -h 250 -t 90 -b "-90" -l "-180" -r 180 --stroke-color "#ffffff" --stroke-weight 0.1 --fill-color "#7c7c7c" --fit-to height --optimize true -a "properties.ADMIN" "properties.ADM0_A3 A3"
+pnpm start -i mexico.geojson -o mexico.svg`
 ```
 
-> Note that the input and output files are placed in the `in` and `out` directories respectively at the root of the project.
+> Note: The input and output files are placed in the `in` and `out` directories respectively at the root of the project.
+
+This will use the default values for the command line arguments (save for the input and output files names):
+
+```bash
+pnpm start -i mexico.geojson -o mexico.svg -w 512 -h 250 -t 90 -b "-90" -l "-180" -r 180 --stroke-color "#ffffff" --stroke-weight 0.1 --fill-color "#7c7c7c" --fit-to height --optimize true -a "properties.ADMIN" "properties.ADM0_A3 A3"
+```
 
 This will transform:
 
@@ -118,7 +128,7 @@ This will transform:
 }
 ```
 
-to:
+into:
 
 ```jsx
 // ./out/map.svg
@@ -139,13 +149,27 @@ to:
 </svg>
 ```
 
-## Disclosure
+> Note: The image will not be centered on the SVG. See [below](#troubleshooting).
 
-This project was created in part using Copilot, particularly the handling of command line arguments and part of this documentation.
+## Troubleshooting
+
+**Problem:** Sometimes the bounds of the data are different from those of the map.
+
+**Solution:** This can be fixed by using the `--top`, `--bottom`, `--left` and `--right` command line arguments.
+
+1. In QGIS, select the layer you want to export, then right-click, select `Export` > `Save Feature As...` and in the dialog box under `Extent (current: none)`, check the checkbox and click `Current Layer Extent`. Write down the values and export it as a GeoJSON file to the `./in` folder.
+
+2. Run the command with the values you wrote down: `pnpm start -i mexico.geojson -o mexico.svg -t 32.715332031 -l "-118.401367188" -b 14.545410156 -r "-86.696289063"`. This will center the paths on the SVG:
+
+![Mexico](/out/mexico.svg)
 
 ## Disclaimer
 
 This project is provided as-is and is not meant to be used in production. It is only meant to be used for personal projects and for learning purposes. However, improvements are welcome.
+
+## Disclosure
+
+This project was created in part using Copilot, particularly the handling of command line arguments and part of this documentation.
 
 ## License
 

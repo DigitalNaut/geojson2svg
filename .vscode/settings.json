@@ -5,6 +5,7 @@
         "EPSG",
         "linestring",
         "multigeojson",
+        "QGIS",
         "viewbox"
     ]
 }
