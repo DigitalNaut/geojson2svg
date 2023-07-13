@@ -1,5 +1,6 @@
 /***
- * https://github.com/gagan-bansal/geojson2svg
+ * Repo: https://github.com/gagan-bansal/geojson2svg
+ * For types discussion see: https://github.com/gagan-bansal/geojson2svg/issues/29
  */
 declare module "geojson2svg" {
   import { GeoJSON } from "geojson";
