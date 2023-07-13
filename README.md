@@ -2,7 +2,7 @@
 
 ![World Map](/images/world_map.svg "A detailed world map in only 92.6 KB!")
 
-This repo demonstrates how to use the [geojson2svg](https://github.com/gagan-bansal/geojson2svg/) library to convert a GeoJSON file to SVG. It also uses [SVGO](https://github.com/svg/svgo) to compress the files to a minimum size.
+This repo demonstrates how to use the [geojson2svg](https://github.com/gagan-bansal/geojson2svg/) library by @gagan-bansal to convert a GeoJSON file to SVG. It also uses [SVGO](https://github.com/svg/svgo) to compress the files to a minimum size.
 
 It uses [Yargs](https://yargs.js.org/) for handling command line arguments.
 
