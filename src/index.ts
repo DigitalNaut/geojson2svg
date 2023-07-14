@@ -1,4 +1,4 @@
-import geojson2svg, { Options } from "geojson2svg";
+import geojson2svg from "geojson2svg";
 import fs from "fs/promises";
 import { optimize, loadConfig } from "svgo";
 
@@ -31,8 +31,7 @@ async function runAsyncCode() {
   console.log(`Converting...\n`);
   const svgContent = converter.convert(JSON.parse(geoJson));
   const svgImage = `<?xml version="1.0"?>
-<svg baseprofile="tiny" fill="${fillColor}" width="${width}" height="${height}" stroke="${strokeColor}" stroke-linecap="round" stroke-linejoin="round"
-  stroke-width="${strokeWeight}" version="1.2" viewbox="${viewBox}"  xmlns="http://www.w3.org/2000/svg">
+<svg fill="${fillColor}" width="${width}" height="${height}" stroke="${strokeColor}" stroke-linecap="round" stroke-linejoin="round" stroke-width="${strokeWeight}" viewBox="${viewBox}">
   ${svgContent}
 </svg>
 `;

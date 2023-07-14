@@ -4,8 +4,6 @@
 
 This repo demonstrates how to use the [geojson2svg](https://github.com/gagan-bansal/geojson2svg/) library by @gagan-bansal to convert a GeoJSON file to SVG. It also uses [SVGO](https://github.com/svg/svgo) to compress the files to a minimum size.
 
-It uses [Yargs](https://yargs.js.org/) for handling command line arguments.
-
 ## Background
 
 The GeoJSON file is a standard format for storing geographic data and the SVG file is a standard format for storing vector graphics. The SVG file can be used to create a map of the geographic data, as in my case, to display using [React Leaflet](https://react-leaflet.js.org/).
@@ -44,12 +42,16 @@ Options:
   -i, --input                    Input file path
                                                [string] [default: "map.geojson"]
   -o, --output                   Output file path  [string] [default: "map.svg"]
-  -w, --width                    Width of the output SVG [number] [default: 512]
+  -w, --width                    Width of the output SVG [number] [default: 250]
   -h, --height                   Height of the output SVG[number] [default: 250]
-  -t, --top                      Top extent of the map    [number] [default: 90]
-  -b, --bottom                   Bottom extent of the map[number] [default: -90]
-  -l, --left                     Left extent of the map [number] [default: -180]
-  -r, --right                    Right extent of the map [number] [default: 180]
+  -t, -N, --top, --north         Top extent of the map
+                                          [number] [default: 20037508.342789244]
+  -b, -S, --bottom, --south      Bottom extent of the map
+                                         [number] [default: -20037508.342789244]
+  -l, -W, --left, --west         Left extent of the map
+                                         [number] [default: -20037508.342789244]
+  -r, -E, --right, --east        Right extent of the map
+                                          [number] [default: 20037508.342789244]
       --stroke-color, --stroke   Color of the stroke
                                                    [string] [default: "#ffffff"]
       --stroke-weight, --weight  Weight of the stroke    [number] [default: 0.1]
@@ -94,16 +96,16 @@ pnpm start -i mexico.geojson -o mexico.svg`
 
 ---
 
-A full example with all the command line arguments for a complete world map:
+A full example with all the command line arguments would be:
 
 ```bash
-pnpm start -i map.geojson -o map.svg -w 512 -h 250 -t 90 -b "-90" -l "-180" -r 180 --stroke-color "#ffffff" --stroke-weight 0.1 --fill-color "#7c7c7c" --fit-to height --optimize true -a "properties.ADMIN" "properties.ADM0_A3 A3"
+pnpm start -i world-map.geojson -o world-map.svg -w 512 -h 250 -N 20037508.342789244 -S "-20037508.342789244" -W "-20037508.342789244" -E 20037508.342789244 --stroke-color "#ffffff" --stroke-weight 0.1 --fill-color "#7c7c7c" --fit-to height --optimize true -a "properties.ADMIN" "properties.ADM0_A3 A3"
 ```
 
 This will transform:
 
 ```jsonc
-// ./in/map.geojson
+// ./in/world-map.geojson
 {
   "type": "FeatureCollection",
   "name": "simplified_map",
@@ -143,7 +145,7 @@ This will transform:
 into:
 
 ```jsx
-// ./out/map.svg
+// ./out/world-map.svg
 <svg
   xmlns="http://www.w3.org/2000/svg"
   width="512"
@@ -162,17 +164,19 @@ into:
 </svg>
 ```
 
-> Note: The image will not be centered on the SVG. See [below](#troubleshooting).
+> Note: The image may not be centered on the SVG. See [below](#troubleshooting).
 
 ## Troubleshooting
 
 **Problem:** Sometimes the bounds of the data are different from those of the map.
 
-**Solution:** This can be fixed by using the `--top`, `--bottom`, `--left` and `--right` command line arguments.
+**Solution:** This can be fixed by using the `--north`, `--south`, `--east` and `--west` command line arguments.
 
 1. In QGIS, select the layer you want to export, then right-click, select `Export` > `Save Feature As...` and in the dialog box under `Extent (current: none)`, check the checkbox and click `Current Layer Extent`. Write down the values and export it as a GeoJSON file to the `./in` folder.
 
-2. Run the command with the values you wrote down: `pnpm start -i mexico.geojson -o mexico.svg -t 32.715332031 -l "-118.401367188" -b 14.545410156 -r "-86.696289063"`. This will center the paths on the SVG:
+2. Run the command with the values you wrote down: `pnpm start -i mexico.geojson -o mexico.svg -N 32.715332031 -W "-118.401367188" -S 14.545410156 -E "-86.696289063" -w 460 -h 250 --fill "#006b17"`. This will center the paths on the SVG:
+
+This may require trial and error.
 
 ![Mexico](/out/mexico.svg)
 

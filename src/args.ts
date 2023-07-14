@@ -2,24 +2,24 @@ import fs from "fs";
 import path from "path";
 import yargs from "yargs";
 
-import type { Options, DynamicAttribute } from "geojson2svg";
+import type {
+  Options,
+  DynamicAttribute,
+  ScreenDims,
+  Extent,
+} from "geojson2svg";
 
-interface InputOptions {
+type InputOptions = {
   input: string;
   output: string;
-  width: number;
-  height: number;
-  top: number;
-  bottom: number;
-  left: number;
-  right: number;
   strokeColor: string;
   strokeWeight: number;
   fillColor: string;
   fitTo: Options["fitTo"];
   optimize: boolean;
   attributes: DynamicAttribute[];
-}
+} & ScreenDims &
+  Extent;
 
 const argv = yargs
   .option("input", {
@@ -27,17 +27,25 @@ const argv = yargs
     describe: "Input file path",
     default: "map.geojson",
     type: "string",
+    coerce: (input: string) => {
+      const path = Array.isArray(input) ? input[0] : input;
+      return path.endsWith(".geojson") ? path : `${path}.geojson`;
+    },
   })
   .option("output", {
     alias: "o",
     describe: "Output file path",
     default: "map.svg",
     type: "string",
+    coerce: (output: string) => {
+      const path = Array.isArray(output) ? output[0] : output;
+      return path.endsWith(".svg") ? path : `${path}.svg`;
+    },
   })
   .option("width", {
     alias: "w",
     describe: "Width of the output SVG",
-    default: 512,
+    default: 250,
     type: "number",
   })
   .option("height", {
@@ -47,28 +55,28 @@ const argv = yargs
     type: "number",
   })
   .option("top", {
-    alias: "t",
+    alias: ["t", "north", "N"],
     describe: "Top extent of the map",
-    default: 90,
     type: "number",
+    default: 20037508.342789244,
   })
   .option("bottom", {
-    alias: "b",
+    alias: ["b", "south", "S"],
     describe: "Bottom extent of the map",
-    default: -90,
     type: "number",
+    default: -20037508.342789244,
   })
   .option("left", {
-    alias: "l",
+    alias: ["l", "west", "W"],
     describe: "Left extent of the map",
-    default: -180,
     type: "number",
+    default: -20037508.342789244,
   })
   .option("right", {
-    alias: "r",
+    alias: ["r", "east", "E"],
     describe: "Right extent of the map",
-    default: 180,
     type: "number",
+    default: 20037508.342789244,
   })
   .option("stroke-color", {
     alias: "stroke",
@@ -145,6 +153,26 @@ const argv = yargs
       throw new Error("Invalid 'fit-to' value. Expected: 'width' or 'height'");
     }
 
+    if (argv["stroke-weight"] < 0.1 || argv["stroke-weight"] > 10) {
+      throw new Error("Invalid 'stroke-weight' value. Expected: 0.1-10");
+    }
+
+    if (Number.isNaN(argv["top"])) {
+      throw new Error("Invalid 'top' value. Expected: number");
+    }
+
+    if (Number.isNaN(argv["bottom"])) {
+      throw new Error("Invalid 'bottom' value. Expected: number");
+    }
+
+    if (Number.isNaN(argv["left"])) {
+      throw new Error("Invalid 'left' value. Expected: number");
+    }
+
+    if (Number.isNaN(argv["right"])) {
+      throw new Error("Invalid 'right' value. Expected: number");
+    }
+
     return true;
   })
   .parseSync() as InputOptions;
@@ -160,15 +188,14 @@ const {
   fitTo,
   optimize,
   attributes,
+  top,
+  bottom,
+  left,
+  right,
 } = argv;
 
 const viewBox = `0 0 ${width} ${height}`;
-const mapExtent = {
-  left: argv.left,
-  bottom: argv.bottom,
-  right: argv.right,
-  top: argv.top,
-};
+const mapExtent: Extent = { left, bottom, right, top };
 
 const inFilePath = path.resolve(__dirname, "../in", inputFilePath);
 const outFilePath = path.resolve(__dirname, "../out", outputFilePath);
