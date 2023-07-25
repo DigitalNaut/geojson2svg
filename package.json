@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "start": "ts-node src/index.ts",
+    "typecheck": "tsc --noEmit",
     "lint": "eslint src/**/*.ts",
     "format": "prettier . -w"
   },
