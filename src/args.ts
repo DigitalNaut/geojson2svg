@@ -2,12 +2,7 @@ import fs from "fs";
 import path from "path";
 import yargs from "yargs";
 
-import type {
-  Options,
-  DynamicAttribute,
-  ScreenDims,
-  Extent,
-} from "geojson2svg";
+import type { Options, DynamicAttribute, ScreenDims, Extent } from "geojson2svg";
 
 type InputOptions = {
   input: string;
@@ -111,8 +106,7 @@ const argv = yargs
   })
   .option("attributes", {
     alias: "a",
-    describe:
-      "To include an attribute use 'name', and 'name newName' to replace",
+    describe: "To include an attribute use 'name', and 'name newName' to replace",
     type: "array",
     default: [],
     coerce: (attributes: string[]) => {
@@ -138,15 +132,11 @@ const argv = yargs
     const validateColor = /^#([0-9a-f]{3}){1,2}$/i;
 
     if (!validateColor.test(argv["fill-color"])) {
-      throw new Error(
-        "Invalid 'fill-color' value. Expected format: #000 or #000000"
-      );
+      throw new Error("Invalid 'fill-color' value. Expected format: #000 or #000000");
     }
 
     if (!validateColor.test(argv["stroke-color"])) {
-      throw new Error(
-        "Invalid 'stroke-color' value. Expected format: #000 or #000000"
-      );
+      throw new Error("Invalid 'stroke-color' value. Expected format: #000 or #000000");
     }
 
     if (argv["fit-to"] !== "width" && argv["fit-to"] !== "height") {

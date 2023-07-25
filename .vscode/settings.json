@@ -1,11 +1,4 @@
 {
-    "svg.preview.background": "transparent",
-    "cSpell.words": [
-        "baseprofile",
-        "EPSG",
-        "linestring",
-        "multigeojson",
-        "QGIS",
-        "viewbox"
-    ]
+  "svg.preview.background": "transparent",
+  "cSpell.words": ["baseprofile", "EPSG", "linestring", "multigeojson", "QGIS", "viewbox"]
 }

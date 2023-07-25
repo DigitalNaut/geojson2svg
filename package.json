@@ -4,7 +4,9 @@
   "description": "",
   "main": "src/index.ts",
   "scripts": {
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/index.ts",
+    "lint": "eslint src/**/*.ts",
+    "format": "prettier . -w"
   },
   "keywords": [],
   "author": "",

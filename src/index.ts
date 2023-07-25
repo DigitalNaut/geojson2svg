@@ -51,9 +51,7 @@ async function runAsyncCode() {
       encoding: "utf8",
       flag: "w",
     });
-    console.log(
-      `\nSaving ${data.length.toLocaleString()} chars to ${outFilePath}\n`
-    );
+    console.log(`\nSaving ${data.length.toLocaleString()} chars to ${outFilePath}\n`);
   } catch (error) {
     console.log(`\nFailed to create ${outFilePath}\nError: ${error}\n`);
     process.exit(1);
