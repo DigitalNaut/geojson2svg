@@ -17,7 +17,7 @@
     "cmd"
   ],
   "author": "DigitalNaut",
-  "license": "ISC",
+  "license": "CC BY-NC-SA 4.0",
   "dependencies": {
     "geojson2svg": "^1.3.6",
     "svgo": "^3.0.2",
